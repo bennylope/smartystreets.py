@@ -4,9 +4,8 @@ Installation
 
 At the command line::
 
-    $ easy_install smartystreets
+    $ pip install smartystreets.py
 
-Or, if you have virtualenvwrapper installed::
-
-    $ mkvirtualenv smartystreets
-    $ pip install smartystreets
+This will install the package `smartystreets` into your Python path, along with
+`requests <http://docs.python-requests.org/en/latest/>`_ if it is not installed
+already, or the previously installed version is < 2.0.

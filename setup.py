@@ -34,13 +34,13 @@ test_requirements = [
 ]
 
 setup(
-    name='smartystreets',
+    name='smartystreets.py',
     version=version,
     description='A wrapper for the SmartyStreets address validation and geolocation API"',
     long_description=readme + '\n\n' + history,
     author='Ben Lopatin',
     author_email='ben@wellfire.co',
-    url='https://github.com/bennylope/smartystreets',
+    url='https://github.com/bennylope/smartystreets.py',
     packages=[
         'smartystreets',
     ],
@@ -50,7 +50,7 @@ setup(
     install_requires=requirements,
     license="BSD",
     zip_safe=False,
-    keywords='smartystreets',
+    keywords='smarty streets',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
