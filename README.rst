@@ -22,7 +22,7 @@ and make opinionated decisions about how to transform the return data.
     way.
 
 * Free software: BSD license
-* Documentation: https://smartystreets.readthedocs.org.
+* Documentation: https://smartystreetspy.readthedocs.org.
 
 Features
 ========
