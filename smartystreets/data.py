@@ -24,6 +24,17 @@ class Address(dict):
         return lat, lng
 
     @property
+    def confirmed(self):
+        """
+        Returns a boolean whether this address is DPV confirmed
+
+        It does not specify *how* or what extent.
+        """
+        valid = ['Y', 'S', 'D']
+        match_code = self.get('analysis', {}).get('dpv_match_code', '')
+        return match_code in valid
+
+    @property
     def id(self):
         """
         Returns the input id

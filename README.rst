@@ -126,19 +126,25 @@ added convenience methods.
 Address geolocation
 ~~~~~~~~~~~~~~~~~~~
 
-::
+Where is it?::
 
     >>> address = client.street_address("100 Main St Richmond, VA")
     >>> address.location
     (37.5436,-77.4453)
 
+Accuracy is subject to address inputs and available data.
+
 Address verification
 ~~~~~~~~~~~~~~~~~~~~
 
-::
+Is this a deliverable address?::
 
-    >>> address.verified
+    >>> address.confirmed
     True
+
+The value here does not necessarily mean this is an exact mail address
+(e.g. with apartment number). The SmartyStreets API will return a code
+indicating the complete DPV status.
 
 Multiple addresses: input ID lookup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
