@@ -2,13 +2,13 @@
 SmartyStreets.py
 ================
 
-.. image:: https://badge.fury.io/py/smartystreets.png
+.. image:: https://badge.fury.io/py/smartystreets.svg
     :target: http://badge.fury.io/py/smartystreets
 
-.. image:: https://travis-ci.org/bennylope/smartystreets.png?branch=master
-        :target: https://travis-ci.org/bennylope/smartystreets
+.. image:: https://travis-ci.org/bennylope/smartystreets.py.svg?branch=master
+        :target: https://travis-ci.org/bennylope/smartystreets.py
 
-.. image:: https://pypip.in/d/smartystreets/badge.png
+.. image:: https://pypip.in/d/smartystreets/badge.svg
         :target: https://pypi.python.org/pypi/smartystreets
 
 
