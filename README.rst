@@ -14,8 +14,12 @@ SmartyStreets.py
 
 A wrapper for the SmartyStreets address validation and geolocation API.
 
-This project is not affiliated with the SmartyStreets service or company in any
-way.
+Other Python libraries exist but skip out on multiple address submission
+and make opinionated decisions about how to transform the return data.
+
+.. note::
+    This project is not affiliated with the SmartyStreets service or company in any
+    way.
 
 * Free software: BSD license
 * Documentation: https://smartystreets.readthedocs.org.
@@ -44,11 +48,11 @@ API client
 
 Create a client instance with your key::
 
-    client = SmartyStreets(MY_API_KEY)
+    client = SmartyStreets(AUTH_ID, AUTH_TOKEN)
 
 Create a client instance with SmartyStreets configuration options::
 
-    client = SmartyStreets(MY_API_KEY, standardize=True, invalid=False,
+    client = SmartyStreets(AUTH_ID, AUTH_TOKEN, standardize=True, invalid=False,
                 logging=False)
 
 These options correspond to the `x-standardize-only`, `x-include-invalid`, and
@@ -61,7 +65,7 @@ once the client will raise an exception if more than 100 are provided. You can
 turn off this functionality using the `truncate_addresses` option, which will
 silently truncate the list to the first 100 addresses::
 
-    client = SmartyStreets(MY_API_KEY, truncate_addresses=True)
+    client = SmartyStreets(AUTH_ID, AUTH_TOKEN, truncate_addresses=True)
 
 Address lookup
 --------------
@@ -154,11 +158,13 @@ Zipcode lookup
 
 `TODO`
 
-Errors
-------
+Response errors
+---------------
 
-200 Success. See response body for result payload.
-400 Bad input. Required fields missing from input or are malformed.
-401 Unauthorized. Addressuthentication failure; invalid credentials.
-402 Payment required. No Addressuthenticationctive subscription found.
-500 Internal server error. General service foundailure; retry request.
+The following documented response codes raise specific exceptions based on a
+`SmaryStreetsError` class.
+
+- 400 Bad input. Required fields missing from input or are malformed.
+- 401 Unauthorized. Addressuthentication failure; invalid credentials.
+- 402 Payment required. No Addressuthenticationctive subscription found.
+- 500 Internal server error. General service foundailure; retry request.
