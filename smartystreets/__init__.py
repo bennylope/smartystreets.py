@@ -3,3 +3,6 @@
 __author__ = 'Ben Lopatin'
 __email__ = 'ben@wellfire.co'
 __version__ = '0.1.0'
+
+
+from .client import Client
