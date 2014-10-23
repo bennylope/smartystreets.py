@@ -66,7 +66,7 @@ class AsyncClient(Client):
             'x-standardize-only': 'true' if self.standardize else 'false',
             'x-include-invalid': 'true' if self.invalid else 'false',
             'x-accept-keypair': 'true' if self.accept_keypair else 'false',
-            }
+        }
         if not self.logging:
             headers['x-suppress-logging'] = 'false'
 
@@ -79,7 +79,7 @@ class AsyncClient(Client):
                 data=json.dumps(data_chunk),
                 params=params,
                 headers=headers,
-            ) for data_chunk in chunker(data, 2)
+            ) for data_chunk in chunker(data, 100)
         )
 
         responses = grequests.imap(rs, size=parallelism)
