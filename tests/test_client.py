@@ -8,10 +8,14 @@ test_smartystreets
 Tests for `smartystreets` module.
 """
 
+import responses
 import unittest
 from mock import MagicMock
 
 from smartystreets.client import Client, validate_args, truncate_args
+from smartystreets.data import Address, AddressCollection
+from smartystreets.exceptions import (SmartyStreetsInputError, SmartyStreetsAuthError,
+                                      SmartyStreetsPaymentError, SmartyStreetsServerError)
 
 
 class TestDecorators(unittest.TestCase):
@@ -55,10 +59,53 @@ class TestDecorators(unittest.TestCase):
 
 class TestClient(unittest.TestCase):
 
-    def test_errors(self):
-        """Error status codes should raise specific errors"""
-        pass
+    def setUp(self):
+        self.client = Client(auth_id='blah', auth_token='blibbidy')
 
+    @responses.activate
+    def test_input_error(self):
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                  body='', status=400,
+                  content_type='application/json')
+        self.assertRaises(SmartyStreetsInputError, self.client.street_addresses, [{}, {}])
+
+    @responses.activate
+    def test_auth_error(self):
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                      body='', status=401,
+                      content_type='application/json')
+        self.assertRaises(SmartyStreetsAuthError, self.client.street_addresses, [{}, {}])
+
+    @responses.activate
+    def test_payment_error(self):
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                      body='', status=422,
+                      content_type='application/json')
+        self.assertRaises(SmartyStreetsPaymentError, self.client.street_addresses, [{}, {}])
+
+    @responses.activate
+    def test_server_error(self):
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                      body='', status=500,
+                      content_type='application/json')
+        self.assertRaises(SmartyStreetsServerError, self.client.street_addresses, [{}, {}])
+
+    @responses.activate
     def test_one_address(self):
-        """Ensure one searched address results in"""
-        pass
+        """Ensure singluar street address method returns an Address"""
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                      body='[{"street_address": "100 Main St"}]',
+                      status=200, content_type='application/json')
+        response = self.client.street_address({"street": "100 Main st"})
+        self.assertIsInstance(response, Address)
+
+    @responses.activate
+    def test_addresses_response(self):
+        """Ensure address return an AddressCollection"""
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                      body='[{"street_address": "100 Main St"}, {"street_address": "200 Main St"}]',
+                      status=200, content_type='application/json')
+        response = self.client.street_addresses([{"street": "100 Main st"},
+                                                 {"street": "200 Main St"}])
+        self.assertIsInstance(response, AddressCollection)
+        self.assertEqual(2, len(response))

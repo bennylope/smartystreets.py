@@ -31,6 +31,7 @@ requirements = [
 
 test_requirements = [
     'mock>=1.0.0',
+    'responses==0.3.0',
 ]
 
 setup(
