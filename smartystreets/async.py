@@ -26,7 +26,7 @@ def chunker(l, n):
     Generates n-sized chunks from the list l
     """
     for i in ranger(0, len(l), n):
-        yield l[i:i+n]
+        yield l[i:i + n]
 
 
 def response_error(request, exception):

@@ -5,6 +5,7 @@ These structures simply wrap Python built in data structures that match the API'
 including some convenience methods for simple access.
 """
 
+
 class Address(dict):
     """
     Class for handling a single address response
@@ -102,4 +103,3 @@ class AddressCollection(list):
             return self[self.index_lookup.get(key)]
         except TypeError:
             raise KeyError
-

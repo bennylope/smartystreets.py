@@ -5,4 +5,4 @@ __email__ = 'ben@wellfire.co'
 __version__ = '0.2.0'
 
 
-from .client import Client
+from .client import Client  # noqa

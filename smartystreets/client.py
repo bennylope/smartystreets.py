@@ -12,8 +12,6 @@ from .data import Address, AddressCollection
 from .exceptions import SmartyStreetsError, ERROR_CODES
 
 
-
-
 def validate_args(f):
     """
     Ensures that *args consist of a consistent type
