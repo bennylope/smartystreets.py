@@ -79,7 +79,7 @@ class TestClient(unittest.TestCase):
     @responses.activate
     def test_payment_error(self):
         responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
-                      body='', status=422,
+                      body='', status=402,
                       content_type='application/json')
         self.assertRaises(SmartyStreetsPaymentError, self.client.street_addresses, [{}, {}])
 

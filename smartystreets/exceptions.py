@@ -19,7 +19,7 @@ class SmartyStreetsAuthError(SmartyStreetsError):
 
 
 class SmartyStreetsPaymentError(SmartyStreetsError):
-    """HTTP 422 Payment required. No active subscription found."""
+    """HTTP 402 Payment required. No active subscription found."""
 
 
 class SmartyStreetsServerError(SmartyStreetsError):
@@ -29,6 +29,6 @@ class SmartyStreetsServerError(SmartyStreetsError):
 ERROR_CODES = {
     400: SmartyStreetsInputError,
     401: SmartyStreetsAuthError,
-    422: SmartyStreetsPaymentError,
+    402: SmartyStreetsPaymentError,
     500: SmartyStreetsServerError,
 }
