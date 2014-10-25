@@ -9,16 +9,9 @@ import json
 import requests
 
 from .data import Address, AddressCollection
-from .exceptions import (SmartyStreetsError, SmartyStreetsInputError, SmartyStreetsAuthError,
-                         SmartyStreetsPaymentError, SmartyStreetsServerError)
+from .exceptions import SmartyStreetsError, ERROR_CODES
 
 
-ERROR_CODES = {
-    400: SmartyStreetsInputError,
-    401: SmartyStreetsAuthError,
-    422: SmartyStreetsPaymentError,
-    500: SmartyStreetsServerError,
-}
 
 
 def validate_args(f):

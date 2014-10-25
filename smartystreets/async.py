@@ -8,6 +8,7 @@ import logging
 
 from .client import Client, validate_args
 from .data import AddressCollection
+from .exceptions import SmartyStreetsError, ERROR_CODES
 
 try:
     # Python 2
@@ -90,11 +91,27 @@ class AsyncClient(Client):
                 status_codes[response.status_code] = 1
             else:
                 status_codes[response.status_code] += 1
+
             if response.status_code == 200:
                 addresses[0:0] = AddressCollection(response.json())  # Fast list insertion
 
-        # If a request results in an exception this should be logged, but ignored unless *all*
-        # responses result in an exception
+            # If an auth error is raised, it's safe to say that this is
+            # going to affect every request, so raise the exception immediately..
+            elif response.status_code == 401:
+                raise ERROR_CODES[401]
+
+        # The return value or exception is simple if it is consistent.
+        if len(status_codes.keys()) == 1:
+            if 200 in status_codes:
+                return addresses, status_codes
+            else:
+                raise ERROR_CODES.get(status_codes.keys()[0], SmartyStreetsError)
+
+        # For any other mix not really sure of the best way to handle it. If it's a mix of 200
+        # and error codes, then returning the resultant addresses and status code dictionary
+        # seems pretty sensible. But if it's a mix of all error codes (could be a mix of payment
+        # error, input error, potentially server error) this will probably require careful
+        # checking in the code using this interface.
         return addresses, status_codes
 
     @validate_args

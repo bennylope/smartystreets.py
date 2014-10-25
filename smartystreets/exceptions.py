@@ -2,6 +2,7 @@
 Exceptions for SmartyStreets requests.
 """
 
+
 class SmartyStreetsError(Exception):
     """Unknown SmartyStreets error"""
 
@@ -23,3 +24,11 @@ class SmartyStreetsPaymentError(SmartyStreetsError):
 
 class SmartyStreetsServerError(SmartyStreetsError):
     """HTTP 500 Internal server error. General service failure; retry request."""
+
+
+ERROR_CODES = {
+    400: SmartyStreetsInputError,
+    401: SmartyStreetsAuthError,
+    422: SmartyStreetsPaymentError,
+    500: SmartyStreetsServerError,
+}
