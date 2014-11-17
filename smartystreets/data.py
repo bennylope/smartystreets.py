@@ -29,7 +29,8 @@ class Address(dict):
         """
         Returns a boolean whether this address is DPV confirmed
 
-        It does not specify *how* or what extent.
+        The property does not specify *how* or what extent.
+
         """
         valid = ['Y', 'S', 'D']
         match_code = self.get('analysis', {}).get('dpv_match_code', '')
