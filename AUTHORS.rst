@@ -5,9 +5,9 @@ Credits
 Development Lead
 ----------------
 
-* Ben Lopatin <ben@wellfire.co>
+* `Ben Lopatin <https://github.com/bennylope>`_
 
 Contributors
 ------------
 
-None yet. Why not be the first?
+* `Arsen Mamikonyan <https://github.com/mamikonyana>`_
