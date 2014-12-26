@@ -159,10 +159,27 @@ one in the request)::
 The `get` method is used because the `SmartyAddresses` object's default lookup
 is against the list index.
 
-Zipcode lookup
---------------
+City, state, zipcode lookup
+---------------------------
 
-`TODO`
+::
+
+    >>> results = client.city_state_zip([{'city': 'Richmond', 'state': 'VA'}])
+    >>> results.zipcodes
+    [
+    >>> results.zipcodes.as_list()
+
+Every `Zipcode` instance has a location which can be accessed by the `point`
+property which returns the appropriate latitude, longitude tuple.::
+
+    >>> results.zipcodes[0].point
+    (38,00, -78.99)
+
+If you're working with PostGIS you'll want the pair ordering reversed::
+
+    >>> results.zipcodes[0].postgis_point
+    (-78.99, 38,00)
+
 
 Response errors
 ---------------

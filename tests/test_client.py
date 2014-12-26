@@ -57,7 +57,16 @@ class TestDecorators(unittest.TestCase):
         self.assertRaises(TypeError, modified_func, selfarg, myargs)
 
 
-class TestClient(unittest.TestCase):
+class TestCityStateZip(unittest.TestCase):
+
+    def setUp(self):
+        self.client = Client(auth_id='blah', auth_token='blibbidy')
+
+    def test_input_error(self):
+        pass
+
+
+class TestStreetAddress(unittest.TestCase):
 
     def setUp(self):
         self.client = Client(auth_id='blah', auth_token='blibbidy')
