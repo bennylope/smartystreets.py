@@ -1,11 +1,11 @@
 """
-Uses gevent to make concurrent requests.
+Uses futures to make concurrent requests.
 """
 
-import grequests
 import json
 import logging
 
+from requests_futures.sessions import FuturesSession
 from .client import Client, validate_args
 from .data import AddressCollection
 from .exceptions import SmartyStreetsError, ERROR_CODES
@@ -74,17 +74,21 @@ class AsyncClient(Client):
         params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
         url = self.BASE_URL + endpoint
 
-        rs = (
-            grequests.post(
-                url=url,
-                data=json.dumps(data_chunk),
-                params=params,
-                headers=headers,
-            ) for data_chunk in chunker(data, 100)
-        )
+        session = FuturesSession(max_workers=parallelism)
+        session.headers = headers
+        session.params = params
 
-        responses = grequests.imap(rs, size=parallelism)
+        futures = [
+            session.post(url, data=json.dumps(data_chunk)) for data_chunk in chunker(data, 100)
+        ]
+
+        # TODO lazily evaluate this
+        while not all([f.done() for f in futures ]):
+            continue
+
         status_codes = {}
+        responses = [f.result() for f in futures]
+
         addresses = AddressCollection([])
         for response in responses:
             if response.status_code not in status_codes.keys():
@@ -105,7 +109,7 @@ class AsyncClient(Client):
             if 200 in status_codes:
                 return addresses, status_codes
             else:
-                raise ERROR_CODES.get(status_codes.keys()[0], SmartyStreetsError)
+                raise ERROR_CODES.get(list(status_codes.keys())[0], SmartyStreetsError)
 
         # For any other mix not really sure of the best way to handle it. If it's a mix of 200
         # and error codes, then returning the resultant addresses and status code dictionary

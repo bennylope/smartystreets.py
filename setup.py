@@ -27,6 +27,7 @@ with open("smartystreets/__init__.py", "r") as module_file:
 
 requirements = [
     'requests>=2.0.0',
+    'requests-futures>=0.9.5,<1.0',
 ]
 
 test_requirements = [

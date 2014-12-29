@@ -7,33 +7,16 @@ test_smartystreets
 
 Tests for `smartystreets` module.
 
-Note that for now async behavior is provided via grequests, which uses gevent, which
-in packaged form is only supported on Python 2.7. As such this functionality is not
-expected to work on Python 3 (for now) which means the tests here are skipped for
-Python 3. This is a sad.
 """
 import responses
-import sys
 import unittest
-from mock import MagicMock
 
-from smartystreets.data import Address, AddressCollection
+from smartystreets.async import AsyncClient
+from smartystreets.data import AddressCollection
 from smartystreets.exceptions import (SmartyStreetsInputError, SmartyStreetsAuthError,
                                       SmartyStreetsPaymentError, SmartyStreetsServerError)
 
-PY_VERSION = int(sys.version[0])
 
-try:
-    import grequests
-except ImportError:
-    # This satisfies the named uses below without needing to import
-    # each and every time the AsyncClient is used.
-    from smartystreets import Client as AsyncClient
-else:
-    from smartystreets.async import AsyncClient
-
-
-@unittest.skipIf(PY_VERSION > 2, "No gevent support in Python 3")
 class TestAsyncClient(unittest.TestCase):
 
     def setUp(self):
