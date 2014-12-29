@@ -82,7 +82,6 @@ class AsyncClient(Client):
             session.post(url, data=json.dumps(data_chunk)) for data_chunk in chunker(data, 100)
         ]
 
-        # TODO lazily evaluate this
         while not all([f.done() for f in futures]):
             continue
 
