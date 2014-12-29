@@ -83,7 +83,7 @@ class AsyncClient(Client):
         ]
 
         # TODO lazily evaluate this
-        while not all([f.done() for f in futures ]):
+        while not all([f.done() for f in futures]):
             continue
 
         status_codes = {}
