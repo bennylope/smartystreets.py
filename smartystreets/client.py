@@ -46,6 +46,22 @@ def truncate_args(f):
     return wrapper
 
 
+def stringify(data):
+    """
+    Ensure all values in the dictionary are strings, except for the value for `candidate` which
+    should just be an integer.
+
+    :param data: a list of addresses in dictionary format
+    :return: the same list with all values except for `candidate` count as a string
+    """
+    return [
+        {
+            k: "%s" % v if k != "candidates" else int(v) for k, v in json_dict.items()
+        }
+        for json_dict in data
+    ]
+
+
 class Client(object):
     """
     Client class for interacting with the SmartyStreets API
@@ -96,7 +112,7 @@ class Client(object):
 
         params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
         url = self.BASE_URL + endpoint
-        response = requests.post(url, json.dumps(data), params=params, headers=headers)
+        response = requests.post(url, json.dumps(stringify(data)), params=params, headers=headers)
         if response.status_code == 200:
             return response.json()
         raise ERROR_CODES.get(response.status_code, SmartyStreetsError)

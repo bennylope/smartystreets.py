@@ -12,7 +12,7 @@ import responses
 import unittest
 from mock import MagicMock
 
-from smartystreets.client import Client, validate_args, truncate_args
+from smartystreets.client import Client, validate_args, truncate_args, stringify
 from smartystreets.data import Address, AddressCollection
 from smartystreets.exceptions import (SmartyStreetsInputError, SmartyStreetsAuthError,
                                       SmartyStreetsPaymentError, SmartyStreetsServerError)
@@ -109,3 +109,15 @@ class TestClient(unittest.TestCase):
                                                  {"street": "200 Main St"}])
         self.assertIsInstance(response, AddressCollection)
         self.assertEqual(2, len(response))
+
+
+class TestDataValidation(unittest.TestCase):
+    """
+    SmartyStreets expects JSON values as strings - test that all data is updated that way
+    """
+
+    def test_stringify(self):
+        self.assertEqual(
+            stringify([{"input_id": 123, "zipcode": 20120, "candidates": "9"}]),
+            [{"input_id": "123", "zipcode": "20120", "candidates": 9}],
+        )
