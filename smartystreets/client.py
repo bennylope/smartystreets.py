@@ -6,6 +6,7 @@ Client module for connecting to and interacting with SmartyStreets API
 """
 
 import json
+import numbers
 import requests
 
 from .data import Address, AddressCollection
@@ -54,9 +55,20 @@ def stringify(data):
     :param data: a list of addresses in dictionary format
     :return: the same list with all values except for `candidate` count as a string
     """
+    def serialize(k, v):
+        if k == "candidates":
+            return int(v)
+        if isinstance(v, numbers.Number):
+            if k == "zipcode":
+                # If values are presented as integers then leading digits may be cut off,
+                # and these are significant for the zipcode. Add them back.
+                return str(v).zfill(5)
+            return str(v)
+        return v
+
     return [
         {
-            k: "%s" % v if k != "candidates" else int(v) for k, v in json_dict.items()
+            k: serialize(k, v) for k, v in json_dict.items()
         }
         for json_dict in data
     ]

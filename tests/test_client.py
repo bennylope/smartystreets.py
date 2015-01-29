@@ -121,3 +121,9 @@ class TestDataValidation(unittest.TestCase):
             stringify([{"input_id": 123, "zipcode": 20120, "candidates": "9"}]),
             [{"input_id": "123", "zipcode": "20120", "candidates": 9}],
         )
+
+    def test_padded_integer(self):
+        self.assertEqual(
+            stringify([{"input_id": 123, "zipcode": 120, "candidates": "9"}]),
+            [{"input_id": "123", "zipcode": "00120", "candidates": 9}],
+        )
