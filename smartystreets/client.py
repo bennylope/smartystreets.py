@@ -120,7 +120,7 @@ class Client(object):
             'x-accept-keypair': 'true' if self.accept_keypair else 'false',
         }
         if not self.logging:
-            headers['x-suppress-logging'] = 'false'
+            headers['x-suppress-logging'] = 'true'
 
         params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
         url = self.BASE_URL + endpoint
