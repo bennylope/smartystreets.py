@@ -3,6 +3,17 @@
 History
 -------
 
+0.2.3 (2015-03-15)
+------------------
+
+* Bugfix in logging suppression header
+
+0.2.2 (2015-01-29)
+------------------
+
+* Adds strict JSON serialization to ensure all-but-specified fields are
+  serialized into strings.
+
 0.2.1 (2014-11-17)
 ------------------
 
