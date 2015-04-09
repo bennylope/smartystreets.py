@@ -3,6 +3,11 @@
 History
 -------
 
+0.2.4 (2015-03-15)
+------------------
+
+* Adds strict JSON serialization to async client as well
+
 0.2.3 (2015-03-15)
 ------------------
 
