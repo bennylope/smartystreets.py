@@ -6,7 +6,7 @@ import grequests
 import json
 import logging
 
-from .client import Client, validate_args
+from .client import Client, validate_args, stringify
 from .data import AddressCollection
 from .exceptions import SmartyStreetsError, ERROR_CODES
 
@@ -77,7 +77,7 @@ class AsyncClient(Client):
         rs = (
             grequests.post(
                 url=url,
-                data=json.dumps(data_chunk),
+                data=json.dumps(stringify(data_chunk)),
                 params=params,
                 headers=headers,
             ) for data_chunk in chunker(data, 100)
