@@ -48,11 +48,12 @@ API client
 
 Create a client instance with your key::
 
-    client = SmartyStreets(AUTH_ID, AUTH_TOKEN)
+    from smartystreets import Client
+    client = Client(AUTH_ID, AUTH_TOKEN)
 
 Create a client instance with SmartyStreets configuration options::
 
-    client = SmartyStreets(AUTH_ID, AUTH_TOKEN, standardize=True, invalid=False,
+    client = Client(AUTH_ID, AUTH_TOKEN, standardize=True, invalid=False,
                 logging=False)
 
 These options correspond to the `x-standardize-only`, `x-include-invalid`, and
@@ -65,7 +66,7 @@ once the client will raise an exception if more than 100 are provided. You can
 turn off this functionality using the `truncate_addresses` option, which will
 silently truncate the list to the first 100 addresses::
 
-    client = SmartyStreets(AUTH_ID, AUTH_TOKEN, truncate_addresses=True)
+    client = Client(AUTH_ID, AUTH_TOKEN, truncate_addresses=True)
 
 Address lookup
 --------------
