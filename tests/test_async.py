@@ -21,19 +21,20 @@ from smartystreets.data import Address, AddressCollection
 from smartystreets.exceptions import (SmartyStreetsInputError, SmartyStreetsAuthError,
                                       SmartyStreetsPaymentError, SmartyStreetsServerError)
 
-PY_VERSION = int(sys.version[0])
+skip = False
 
 try:
     import grequests
 except ImportError:
-    # This satisfies the named uses below without needing to import
-    # each and every time the AsyncClient is used.
-    from smartystreets import Client as AsyncClient
+    # We will skip these tests if we can't find grequests.  The sync. client
+    # returns data in a slightly different format, so these tests fail if we
+    # try to substiute the sync. for the async. client.
+    skip = True
 else:
     from smartystreets.async import AsyncClient
 
 
-@unittest.skipIf(PY_VERSION > 2, "No gevent support in Python 3")
+@unittest.skipIf(skip, "No grequests support found")
 class TestAsyncClient(unittest.TestCase):
 
     def setUp(self):
