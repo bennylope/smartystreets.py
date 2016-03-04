@@ -103,9 +103,6 @@ class Client(object):
         self.logging = logging
         self.accept_keypair = accept_keypair
         self.truncate_addresses = truncate_addresses
-        self.session = requests.Session()
-        self.session.mount(self.BASE_URL, requests.adapters.HTTPAdapter(max_retries=5))
-            
 
     def post(self, endpoint, data):
         """
@@ -127,7 +124,7 @@ class Client(object):
 
         params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
         url = self.BASE_URL + endpoint
-        response = self.session.post(url, json.dumps(stringify(data)), params=params, headers=headers)
+        response = requests.post(url, json.dumps(stringify(data)), params=params, headers=headers)
         if response.status_code == 200:
             return response.json()
         raise ERROR_CODES.get(response.status_code, SmartyStreetsError)
