@@ -3,6 +3,12 @@
 History
 -------
 
+0.3.0 (2016-03-10)
+------------------
+
+* Ensure keep-alive is used for client connections (pmkane!)
+* Testing updates (pmkane!)
+
 0.2.4 (2015-03-15)
 ------------------
 
