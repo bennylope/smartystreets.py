@@ -81,7 +81,7 @@ class Client(object):
     BASE_URL = "https://api.smartystreets.com/"
 
     def __init__(self, auth_id, auth_token, standardize=False, invalid=False, logging=True,
-                 accept_keypair=False, truncate_addresses=False):
+                 accept_keypair=False, truncate_addresses=False, timeout=None):
         """
         Constructs the client
 
@@ -103,6 +103,7 @@ class Client(object):
         self.logging = logging
         self.accept_keypair = accept_keypair
         self.truncate_addresses = truncate_addresses
+        self.timeout = timeout
         self.session = requests.Session()
         self.session.mount(self.BASE_URL, requests.adapters.HTTPAdapter(max_retries=5))
 
@@ -127,7 +128,7 @@ class Client(object):
         params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
         url = self.BASE_URL + endpoint
         response = self.session.post(url, json.dumps(stringify(data)),
-                                     params=params, headers=headers)
+                                     params=params, headers=headers, timeout=self.timeout)
         if response.status_code == 200:
             return response.json()
         raise ERROR_CODES.get(response.status_code, SmartyStreetsError)
