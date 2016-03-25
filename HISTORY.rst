@@ -3,6 +3,11 @@
 History
 -------
 
+0.4.0 (2016-03-25)
+------------------
+
+* Add optional timeout value for client (pmkane!)
+
 0.3.0 (2016-03-10)
 ------------------
 
