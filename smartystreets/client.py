@@ -94,6 +94,7 @@ class Client(object):
         :param accept_keypair: boolean to toggle default keypair behavior
         :param truncate_addresses: boolean to silently truncate address lists in excess of the
                 SmartyStreets maximum rather than raise an error.
+        :param timeout: optional timeout value in seconds for requests.
         :return: the configured client object
         """
         self.auth_id = auth_id
