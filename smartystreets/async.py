@@ -45,15 +45,16 @@ class AsyncClient(Client):
     """
     A SmartyStreets client that supports concurrent requests.
 
-    You are strongly recommended to use the input_id parameter as the input_index values will be
-    all but worthless.
+    You are strongly recommended to use the input_id parameter as the
+    input_index values will be all but worthless.
     """
-    def post(self, endpoint, data, parallelism=5):
+    def post(self, url, data, parallelism=5):
         """
         Executes most of the request.
 
-        The parallelism parameter is useful to avoid swamping the API service with calls. Thus
-        the entire set of requests won't be all made at once, but in chunked groups.
+        The parallelism parameter is useful to avoid swamping the API service
+        with calls. Thus the entire set of requests won't be all made at once,
+        but in chunked groups.
 
         :param endpoint: string indicating the URL component to call
         :param data: the JSON ready data to submit (list of dictionaries of addresses)
@@ -72,7 +73,6 @@ class AsyncClient(Client):
             headers['x-suppress-logging'] = 'false'
 
         params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
-        url = self.BASE_URL + endpoint
 
         rs = (
             grequests.post(
@@ -107,11 +107,12 @@ class AsyncClient(Client):
             else:
                 raise ERROR_CODES.get(status_codes.keys()[0], SmartyStreetsError)
 
-        # For any other mix not really sure of the best way to handle it. If it's a mix of 200
-        # and error codes, then returning the resultant addresses and status code dictionary
-        # seems pretty sensible. But if it's a mix of all error codes (could be a mix of payment
-        # error, input error, potentially server error) this will probably require careful
-        # checking in the code using this interface.
+        # For any other mix not really sure of the best way to handle it.
+        # If it's a mix of 200 and error codes, then returning the resultant
+        # addresses and status code dictionary seems pretty sensible. But if
+        # it's a mix of all error codes (could be a mix of payment error,
+        # input error, potentially server error) this will probably require
+        # careful checking in the code using this interface.
         return addresses, status_codes
 
     @validate_args
@@ -122,7 +123,7 @@ class AsyncClient(Client):
         :param addresses: a list of addresses in dictionary format
         :return: a tuple of an AddressCollection and a dictionary of the response codes and the
         """
-        return self.post("street-address", addresses)
+        return self.post(self.STREET_ADDRESS_BASE_URL + "street-address", addresses)
 
     def street_address(self, address):
         raise NotImplementedError(

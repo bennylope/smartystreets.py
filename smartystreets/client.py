@@ -9,7 +9,7 @@ import json
 import numbers
 import requests
 
-from .data import Address, AddressCollection
+from .data import Address, AddressCollection, Zipcode, ZipcodeCollection
 from .exceptions import SmartyStreetsError, ERROR_CODES
 
 
@@ -42,15 +42,15 @@ def truncate_args(f):
             if self.truncate_addresses:
                 args = args[:100]
             else:
-                raise ValueError("This exceeds 100 address at a time SmartyStreets limit")
+                raise ValueError("This exceeds 100 addresses at a time SmartyStreets limit")
         return f(self, args)
     return wrapper
 
 
 def stringify(data):
     """
-    Ensure all values in the dictionary are strings, except for the value for `candidate` which
-    should just be an integer.
+    Ensure all values in the dictionary are strings, except for the value for
+    `candidate` which should just be an integer.
 
     :param data: a list of addresses in dictionary format
     :return: the same list with all values except for `candidate` count as a string
@@ -78,7 +78,8 @@ class Client(object):
     """
     Client class for interacting with the SmartyStreets API
     """
-    BASE_URL = "https://api.smartystreets.com/"
+    STREET_ADDRESS_BASE_URL = "https://api.smartystreets.com/"
+    ZIPCODE_BASE_URL = "https://us-zipcode.api.smartystreets.com/"
 
     def __init__(self, auth_id, auth_token, standardize=False, invalid=False, logging=True,
                  accept_keypair=False, truncate_addresses=False, timeout=None):
@@ -106,9 +107,12 @@ class Client(object):
         self.truncate_addresses = truncate_addresses
         self.timeout = timeout
         self.session = requests.Session()
-        self.session.mount(self.BASE_URL, requests.adapters.HTTPAdapter(max_retries=5))
+        self.session.mount(self.STREET_ADDRESS_BASE_URL, requests.adapters.HTTPAdapter(
+            max_retries=5))
+        self.session.mount(self.ZIPCODE_BASE_URL, requests.adapters.HTTPAdapter(
+            max_retries=5))
 
-    def post(self, endpoint, data):
+    def post(self, url, data):
         """
         Executes the HTTP POST request
 
@@ -127,7 +131,6 @@ class Client(object):
             headers['x-suppress-logging'] = 'true'
 
         params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
-        url = self.BASE_URL + endpoint
         response = self.session.post(url, json.dumps(stringify(data)),
                                      params=params, headers=headers, timeout=self.timeout)
         if response.status_code == 200:
@@ -140,11 +143,13 @@ class Client(object):
         """
         API method for verifying street address and geolocating
 
-        Returns an AddressCollection always for consistency. In common usage it'd be simple and
-        sane to return an Address when only one address was searched, however this makes
-        populating search addresses from lists of unknown length problematic. If that list
-        returns only one address now the code has to check the type of return value to ensure
-        that it isn't applying behavior for an expected list type rather than a single dictionary.
+        Returns an AddressCollection always for consistency. In common usage
+        it'd be simple and sane to return an Address when only one address
+        was searched, however this makes populating search addresses from
+        lists of unknown length problematic. If that list returns only one
+        address now the code has to check the type of return value to ensure
+        that it isn't applying behavior for an expected list type rather than
+        a single dictionary.
 
         >>> client.street_addresses(["100 Main St, Anywhere, USA"], ["6 S Blvd, Richmond, VA"])
         >>> client.street_addresses([{"street": "100 Main St, anywhere USA"}, ... ])
@@ -153,12 +158,13 @@ class Client(object):
         :return: an AddressCollection
         """
 
-        # While it's okay in theory to accept freeform addresses they do need to be submitted in
-        # a dictionary format.
+        # While it's okay in theory to accept freeform addresses they do need
+        # to be submitted in a dictionary format.
         if type(addresses[0]) != dict:
             addresses = [{'street': arg for arg in addresses}]
 
-        return AddressCollection(self.post('street-address', data=addresses))
+        return AddressCollection(self.post(
+            self.STREET_ADDRESS_BASE_URL + 'street-address', data=addresses))
 
     def street_address(self, address):
         """
@@ -175,5 +181,37 @@ class Client(object):
             return None
         return Address(address[0])
 
-    def zipcode(self, *args):
-        raise NotImplementedError("You cannot lookup zipcodes yet")
+    @truncate_args
+    @validate_args
+    def zipcodes(self, zipcodes):
+        """
+        API method for verifying zip code and geolocating
+
+        Returns a ZipcodeCollection always for consistency.
+
+        >>> client.zipcodes(["10001", "10002"])
+        >>> client.zipcodes([{"city": "New York", "state": "NY"}, ... ])
+
+        :param zipcodes: 1 or more zip codes in string or dict format
+        :return: a ZipcodeCollection
+        """
+
+        if type(zipcodes[0]) != dict:
+            zipcodes = [{'zipcode': arg for arg in zipcodes}]
+
+        return ZipcodeCollection(self.post(self.ZIPCODE_BASE_URL + 'lookup', data=zipcodes))
+
+    def zipcode(self, zipcode):
+        """
+        Geocode one and only zipcode, get a single Zipcode object back
+
+        >>> client.zipcode("10001")
+        >>> client.zipcode({"city": "New York", "state": "NY"})
+
+        :param zipcode: string or dictionary with zipcode information
+        :return: a Zipcode object or None for no match
+        """
+        zipcode = self.zipcodes([zipcode])
+        if not len(zipcode):
+            return None
+        return Zipcode(zipcode[0])

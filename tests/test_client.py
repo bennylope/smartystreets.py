@@ -14,6 +14,7 @@ from mock import MagicMock
 
 from smartystreets.client import Client, validate_args, truncate_args, stringify
 from smartystreets.data import Address, AddressCollection
+from smartystreets.data import Zipcode, ZipcodeCollection
 from smartystreets.exceptions import (SmartyStreetsInputError, SmartyStreetsAuthError,
                                       SmartyStreetsPaymentError, SmartyStreetsServerError)
 
@@ -57,7 +58,7 @@ class TestDecorators(unittest.TestCase):
         self.assertRaises(TypeError, modified_func, selfarg, myargs)
 
 
-class TestClient(unittest.TestCase):
+class TestStreetAddress(unittest.TestCase):
 
     def setUp(self):
         self.client = Client(auth_id='blah', auth_token='blibbidy')
@@ -111,9 +112,64 @@ class TestClient(unittest.TestCase):
         self.assertEqual(2, len(response))
 
 
+class TestZipcode(unittest.TestCase):
+
+    def setUp(self):
+        self.client = Client(auth_id='blah', auth_token='blibbidy')
+
+    @responses.activate
+    def test_input_error(self):
+        responses.add(responses.POST, 'https://us-zipcode.api.smartystreets.com/lookup',
+                  body='', status=400,
+                  content_type='application/json')
+        self.assertRaises(SmartyStreetsInputError, self.client.zipcodes, [{}, {}])
+
+    @responses.activate
+    def test_auth_error(self):
+        responses.add(responses.POST, 'https://us-zipcode.api.smartystreets.com/lookup',
+                      body='', status=401,
+                      content_type='application/json')
+        self.assertRaises(SmartyStreetsAuthError, self.client.zipcodes, [{}, {}])
+
+    @responses.activate
+    def test_payment_error(self):
+        responses.add(responses.POST, 'https://us-zipcode.api.smartystreets.com/lookup',
+                      body='', status=402,
+                      content_type='application/json')
+        self.assertRaises(SmartyStreetsPaymentError, self.client.zipcodes, [{}, {}])
+
+    @responses.activate
+    def test_server_error(self):
+        responses.add(responses.POST, 'https://us-zipcode.api.smartystreets.com/lookup',
+                      body='', status=500,
+                      content_type='application/json')
+        self.assertRaises(SmartyStreetsServerError, self.client.zipcodes, [{}, {}])
+
+    @responses.activate
+    def test_one_zipcode(self):
+        """Ensure singular zipcode method returns a Zipcode"""
+        responses.add(responses.POST, 'https://us-zipcode.api.smartystreets.com/lookup',
+                      body='[{"city_states": [{"mailable_city": true, "city": "New York", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "Empire State", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "Gpo", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "Greeley Square", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "Macys Finance", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "Manhattan", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "New York City", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "NY", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "NY City", "state": "New York", "state_abbreviation": "NY"}, {"mailable_city": false, "city": "Nyc", "state": "New York", "state_abbreviation": "NY"}], "input_index": 0, "zipcodes": [{"county_fips": "36061", "zipcode_type": "S", "county_name": "New York", "zipcode": "10001", "longitude": -73.98935, "precision": "Zip5", "default_city": "New York", "latitude": 40.74949}]}]',
+                      status=200, content_type='application/json')
+        response = self.client.zipcode({"zipcode": "10001"})
+        self.assertIsInstance(response, Zipcode)
+
+    @responses.activate
+    def test_zipcodes_response(self):
+        """Ensure zipcodes return a ZipcodeCollection"""
+        responses.add(responses.POST, 'https://us-zipcode.api.smartystreets.com/lookup',
+                      body='[{"zipcode": "10001"}, {"zipcode": "10002"}]',
+                      status=200, content_type='application/json')
+        response = self.client.zipcodes([{"zipcode": "10001"},
+                                                 {"zipcode": "10002"}])
+        self.assertIsInstance(response, ZipcodeCollection)
+        self.assertEqual(2, len(response))
+
+
 class TestDataValidation(unittest.TestCase):
     """
-    SmartyStreets expects JSON values as strings - test that all data is updated that way
+    SmartyStreets expects JSON values as strings - test that all data is
+    updated that way
     """
 
     def test_stringify(self):
