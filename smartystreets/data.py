@@ -56,6 +56,39 @@ class Address(dict):
         except KeyError:
             return None
 
+    @property
+    def vacant(self):
+        """Returns dpv_vacant"""
+        if self.has_key('analysis'):
+            if self['analysis'].has_key('dpv_vacant'):
+                return self['analysis']['dpv_vacant']
+        return None
+
+    @property
+    def addressee(self):
+        """Returns addressee"""
+        if self.has_key('addressee'):
+            return self['addressess']
+        return None
+
+    @property
+    def delivery_line_1(self):
+        if self.has_key('delivery_line_1'):
+            return self['delivery_line_1']
+        return None
+
+    @property
+    def delivery_line_2(self):
+        if self.has_key('delivery_line_2'):
+            return self['delivery_line_2']
+        return None
+
+    @property
+    def last_line(self):
+        if self.has_key('last_line'):
+            return self['last_line']
+        return None
+
 
 class AddressCollection(list):
     """
