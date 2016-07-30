@@ -68,7 +68,7 @@ class Address(dict):
     def addressee(self):
         """Returns addressee"""
         if self.has_key('addressee'):
-            return self['addressess']
+            return self['addressee']
         return None
 
     @property
