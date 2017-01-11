@@ -28,9 +28,7 @@ class Address(dict):
     def confirmed(self):
         """
         Returns a boolean whether this address is DPV confirmed
-
         The property does not specify *how* or what extent.
-
         """
         valid = ['Y', 'S', 'D']
         match_code = self.get('analysis', {}).get('dpv_match_code', '')
@@ -57,12 +55,16 @@ class Address(dict):
             return None
 
     @property
-    def vacant(self):
+    def vacant_raw(self):
         """Returns dpv_vacant"""
         if self.has_key('analysis'):
             if self['analysis'].has_key('dpv_vacant'):
                 return self['analysis']['dpv_vacant']
         return None
+
+    @property
+    def vacant(self):
+        return 1 if self['analysis']['dpv_vacant'] == 'Y' else 0
 
     @property
     def addressee(self):
@@ -89,6 +91,17 @@ class Address(dict):
             return self['last_line']
         return None
 
+    @property
+    def footnotes(self):
+        if self['analysis'].has_key('footnotes'):
+            return self['analysis']['footnotes']
+        return None
+
+    @property
+    def components_street_suffix(self):
+        if self['components'].has_key('street_suffix'):
+            return self['components']['street_suffix']
+        return None
 
 class AddressCollection(list):
     """
