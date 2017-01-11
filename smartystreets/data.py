@@ -105,6 +105,12 @@ class Address(dict):
             return self['components']['street_suffix']
         return None
 
+    @property
+    def metadata_dst(self):
+        if self['metadata'].has_key('dst'):
+            return self['metadata']['dst']
+        return None
+
 class AddressCollection(list):
     """
     Class for handling multiple responses.
