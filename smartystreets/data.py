@@ -64,7 +64,9 @@ class Address(dict):
 
     @property
     def vacant(self):
-        return 1 if self['analysis']['dpv_vacant'] == 'Y' else 0
+        if self['analysis'].has_key('dpv_vacant'):
+            return 1 if self['analysis']['dpv_vacant'] == 'Y' else 0
+        return None
 
     @property
     def addressee(self):
