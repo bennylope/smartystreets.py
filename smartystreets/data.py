@@ -111,6 +111,13 @@ class Address(dict):
             return self['metadata']['dst']
         return None
 
+    @property
+    def metadata_county_fips(self):
+        if self['metadata'].has_key('county_fips'):
+            return self['metadata']['county_fips']
+        return None
+
+
 class AddressCollection(list):
     """
     Class for handling multiple responses.
