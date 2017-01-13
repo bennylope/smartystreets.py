@@ -55,14 +55,6 @@ class Address(dict):
             return None
 
     @property
-    def vacant_raw(self):
-        """Returns dpv_vacant"""
-        if self.has_key('analysis'):
-            if self['analysis'].has_key('dpv_vacant'):
-                return self['analysis']['dpv_vacant']
-        return None
-
-    @property
     def vacant(self):
         if self['analysis'].has_key('dpv_vacant'):
             return 1 if self['analysis']['dpv_vacant'] == 'Y' else 0
@@ -97,6 +89,18 @@ class Address(dict):
     def footnotes(self):
         if self['analysis'].has_key('footnotes'):
             return self['analysis']['footnotes']
+        return None
+
+    @property
+    def analysis_active(self):
+        if self['analysis'].has_key('active'):
+            return self['analysis']['active']
+        return None
+
+    @property
+    def analysis_dpv_vacant(self):
+        if self['analysis'].has_key('dpv_vacant'):
+            return self['analysis']['dpv_vacant']
         return None
 
     @property
