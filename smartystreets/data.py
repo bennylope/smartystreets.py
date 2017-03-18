@@ -104,6 +104,12 @@ class Address(dict):
         return None
 
     @property
+    def analysis_dpv_cmra(self):
+        if self['analysis'].has_key('dpv_cmra'):
+            return self['analysis']['dpv_cmra']
+        return None
+
+    @property
     def components_street_suffix(self):
         if self['components'].has_key('street_suffix'):
             return self['components']['street_suffix']
