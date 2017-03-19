@@ -127,7 +127,7 @@ class Address(dict):
             return self['metadata']['dst']
         return None
 
-    @@property
+    @property
     def metadata_congressional_district(self):
         if self['metadata'].has_key('congressional_district'):
             return self['metadata']['congressional_district']
