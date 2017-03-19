@@ -116,9 +116,21 @@ class Address(dict):
         return None
 
     @property
+    def primary_number(self):
+        if self['components'].has_key('primary_number'):
+            return self['components']['primary_number']
+        return None
+
+    @property
     def metadata_dst(self):
         if self['metadata'].has_key('dst'):
             return self['metadata']['dst']
+        return None
+
+    @@property
+    def metadata_congressional_district(self):
+        if self['metadata'].has_key('congressional_district'):
+            return self['metadata']['congressional_district']
         return None
 
     @property
