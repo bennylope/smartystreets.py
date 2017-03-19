@@ -4,6 +4,7 @@ Data structures module for SmartyStreets API.
 These structures simply wrap Python built in data structures that match the API's JSON responses,
 including some convenience methods for simple access.
 """
+import logging
 
 
 class Address(dict):
@@ -58,6 +59,16 @@ class Address(dict):
     def vacant(self):
         if self['analysis'].has_key('dpv_vacant'):
             return 1 if self['analysis']['dpv_vacant'] == 'Y' else 0
+        return None
+
+    # function that checks if fields exist, returns None if not
+    def lookup(self, group, field):
+        if self.has_key(group):
+            if self[group].has_key(field):
+                return self[group][field]
+            logging.getLogger('smarystreets').error('[group] {} [field] {}'.format(group, field))
+            return None
+        logging.getLogger('smarystreets').error('[group] {}'.format(group))
         return None
 
     @property
@@ -125,6 +136,12 @@ class Address(dict):
     def metadata_dst(self):
         if self['metadata'].has_key('dst'):
             return self['metadata']['dst']
+        return None
+
+    @property
+    def metadata_county_name(self):
+        if self['metadata'].has_key('county_name'):
+            return self['metadata']['county_name']
         return None
 
     @property
