@@ -92,11 +92,18 @@ class TestClient(unittest.TestCase):
 
     @responses.activate
     def test_one_address(self):
-        """Ensure singluar street address method returns an Address"""
+        """Ensure singular street address method returns an Address"""
         responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
                       body='[{"street_address": "100 Main St"}]',
                       status=200, content_type='application/json')
         response = self.client.street_address({"street": "100 Main st"})
+        self.assertIsInstance(response, Address)
+
+        # test body as str as well
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                      body="100 Main St",
+                      status=200, content_type='application/json')
+        response = self.client.street_address("100 Main st")
         self.assertIsInstance(response, Address)
 
     @responses.activate
@@ -107,6 +114,15 @@ class TestClient(unittest.TestCase):
                       status=200, content_type='application/json')
         response = self.client.street_addresses([{"street": "100 Main st"},
                                                  {"street": "200 Main St"}])
+        self.assertIsInstance(response, AddressCollection)
+        self.assertEqual(2, len(response))
+
+        # test body as str as well
+        responses.add(responses.POST, 'https://api.smartystreets.com/street-address',
+                      body=["100 Main St", "200 Main St"],
+                      status=200, content_type='application/json')
+        response = self.client.street_addresses(["100 Main st",
+                                                 "200 Main St"])
         self.assertIsInstance(response, AddressCollection)
         self.assertEqual(2, len(response))
 

@@ -4,6 +4,7 @@ Data structures module for SmartyStreets API.
 These structures simply wrap Python built in data structures that match the API's JSON responses,
 including some convenience methods for simple access.
 """
+import logging
 
 
 class Address(dict):
@@ -28,9 +29,7 @@ class Address(dict):
     def confirmed(self):
         """
         Returns a boolean whether this address is DPV confirmed
-
         The property does not specify *how* or what extent.
-
         """
         valid = ['Y', 'S', 'D']
         match_code = self.get('analysis', {}).get('dpv_match_code', '')
@@ -55,6 +54,107 @@ class Address(dict):
             return self['input_index']
         except KeyError:
             return None
+
+    @property
+    def vacant(self):
+        if self['analysis'].has_key('dpv_vacant'):
+            return 1 if self['analysis']['dpv_vacant'] == 'Y' else 0
+        return None
+
+    # function that checks if fields exist, returns None if not
+    def lookup(self, group, field):
+        if self.has_key(group):
+            if self[group].has_key(field):
+                return self[group][field]
+            logging.getLogger('smarystreets').error('[group] {} [field] {}'.format(group, field))
+            return None
+        logging.getLogger('smarystreets').error('[group] {}'.format(group))
+        return None
+
+    @property
+    def addressee(self):
+        """Returns addressee"""
+        if self.has_key('addressee'):
+            return self['addressee']
+        return None
+
+    @property
+    def delivery_line_1(self):
+        if self.has_key('delivery_line_1'):
+            return self['delivery_line_1']
+        return None
+
+    @property
+    def delivery_line_2(self):
+        if self.has_key('delivery_line_2'):
+            return self['delivery_line_2']
+        return None
+
+    @property
+    def last_line(self):
+        if self.has_key('last_line'):
+            return self['last_line']
+        return None
+
+    @property
+    def footnotes(self):
+        if self['analysis'].has_key('footnotes'):
+            return self['analysis']['footnotes']
+        return None
+
+    @property
+    def analysis_active(self):
+        if self['analysis'].has_key('active'):
+            return self['analysis']['active']
+        return None
+
+    @property
+    def analysis_dpv_vacant(self):
+        if self['analysis'].has_key('dpv_vacant'):
+            return self['analysis']['dpv_vacant']
+        return None
+
+    @property
+    def analysis_dpv_cmra(self):
+        if self['analysis'].has_key('dpv_cmra'):
+            return self['analysis']['dpv_cmra']
+        return None
+
+    @property
+    def components_street_suffix(self):
+        if self['components'].has_key('street_suffix'):
+            return self['components']['street_suffix']
+        return None
+
+    @property
+    def primary_number(self):
+        if self['components'].has_key('primary_number'):
+            return self['components']['primary_number']
+        return None
+
+    @property
+    def metadata_dst(self):
+        if self['metadata'].has_key('dst'):
+            return self['metadata']['dst']
+        return None
+
+    @property
+    def metadata_county_name(self):
+        if self['metadata'].has_key('county_name'):
+            return self['metadata']['county_name']
+        return None
+
+    @property
+    def metadata_congressional_district(self):
+        if self['metadata'].has_key('congressional_district'):
+            return self['metadata']['congressional_district']
+        return None
+
+    @property
+    def metadata_county_fips(self):
+        if self['metadata'].has_key('county_fips'):
+            return self['metadata']['county_fips']
+        return None
 
 
 class AddressCollection(list):
