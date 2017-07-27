@@ -156,7 +156,7 @@ class Client(object):
         # While it's okay in theory to accept freeform addresses they do need to be submitted in
         # a dictionary format.
         if type(addresses[0]) != dict:
-            addresses = [{'street': arg for arg in addresses}]
+            addresses = [{'street': arg} for arg in addresses]
 
         return AddressCollection(self.post('street-address', data=addresses))
 
