@@ -17,11 +17,13 @@ class Address(dict):
         Returns the geolocation as a lat/lng pair
         """
         try:
-            lat, lng = self['metadata']['latitude'], self['metadata']['longitude']
+            lat, lng = self["metadata"]["latitude"], self["metadata"]["longitude"]
         except KeyError:
             return None
+
         if not lat or not lng:
             return None
+
         return lat, lng
 
     @property
@@ -32,8 +34,8 @@ class Address(dict):
         The property does not specify *how* or what extent.
 
         """
-        valid = ['Y', 'S', 'D']
-        match_code = self.get('analysis', {}).get('dpv_match_code', '')
+        valid = ["Y", "S", "D"]
+        match_code = self.get("analysis", {}).get("dpv_match_code", "")
         return match_code in valid
 
     @property
@@ -42,7 +44,8 @@ class Address(dict):
         Returns the input id
         """
         try:
-            return self['input_id']
+            return self["input_id"]
+
         except KeyError:
             return None
 
@@ -52,7 +55,8 @@ class Address(dict):
         Returns the input_index
         """
         try:
-            return self['input_index']
+            return self["input_index"]
+
         except KeyError:
             return None
 
@@ -89,6 +93,7 @@ class AddressCollection(list):
         """
         try:
             return self[self.id_lookup.get(key)]
+
         except TypeError:
             raise KeyError
 
@@ -102,5 +107,6 @@ class AddressCollection(list):
         """
         try:
             return self[self.index_lookup.get(key)]
+
         except TypeError:
             raise KeyError

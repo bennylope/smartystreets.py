@@ -48,6 +48,7 @@ class AsyncClient(Client):
     You are strongly recommended to use the input_id parameter as the input_index values will be
     all but worthless.
     """
+
     def post(self, endpoint, data, parallelism=5):
         """
         Executes most of the request.
@@ -62,16 +63,16 @@ class AsyncClient(Client):
                 count for each.
         """
         headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'x-standardize-only': 'true' if self.standardize else 'false',
-            'x-include-invalid': 'true' if self.invalid else 'false',
-            'x-accept-keypair': 'true' if self.accept_keypair else 'false',
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-standardize-only": "true" if self.standardize else "false",
+            "x-include-invalid": "true" if self.invalid else "false",
+            "x-accept-keypair": "true" if self.accept_keypair else "false",
         }
         if not self.logging:
-            headers['x-suppress-logging'] = 'false'
+            headers["x-suppress-logging"] = "false"
 
-        params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
+        params = {"auth-id": self.auth_id, "auth-token": self.auth_token}
         url = self.BASE_URL + endpoint
 
         rs = (
@@ -80,7 +81,8 @@ class AsyncClient(Client):
                 data=json.dumps(stringify(data_chunk)),
                 params=params,
                 headers=headers,
-            ) for data_chunk in chunker(data, 100)
+            )
+            for data_chunk in chunker(data, 100)
         )
 
         responses = grequests.imap(rs, size=parallelism)
@@ -93,7 +95,9 @@ class AsyncClient(Client):
                 status_codes[response.status_code] += 1
 
             if response.status_code == 200:
-                addresses[0:0] = AddressCollection(response.json())  # Fast list insertion
+                addresses[0:0] = AddressCollection(
+                    response.json()
+                )  # Fast list insertion
 
             # If an auth error is raised, it's safe to say that this is
             # going to affect every request, so raise the exception immediately..
@@ -104,6 +108,7 @@ class AsyncClient(Client):
         if len(status_codes.keys()) == 1:
             if 200 in status_codes:
                 return addresses, status_codes
+
             else:
                 raise ERROR_CODES.get(status_codes.keys()[0], SmartyStreetsError)
 
@@ -126,4 +131,5 @@ class AsyncClient(Client):
 
     def street_address(self, address):
         raise NotImplementedError(
-            "The street_address method is not implemented for the AsyncClient")
+            "The street_address method is not implemented for the AsyncClient"
+        )

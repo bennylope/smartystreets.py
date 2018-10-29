@@ -20,13 +20,17 @@ def validate_args(f):
     :param f: any client method with *args parameter
     :return: function f
     """
+
     def wrapper(self, args):
         arg_types = set([type(arg) for arg in args])
         if len(arg_types) > 1:
             raise TypeError("Mixed input types are not allowed")
+
         elif list(arg_types)[0] not in (dict, str):
             raise TypeError("Only dict and str types accepted")
+
         return f(self, args)
+
     return wrapper
 
 
@@ -37,13 +41,18 @@ def truncate_args(f):
     :param f: any Client method with *args parameter
     :return: function f
     """
+
     def wrapper(self, args):
         if len(args) > 100:
             if self.truncate_addresses:
                 args = args[:100]
             else:
-                raise ValueError("This exceeds 100 address at a time SmartyStreets limit")
+                raise ValueError(
+                    "This exceeds 100 address at a time SmartyStreets limit"
+                )
+
         return f(self, args)
+
     return wrapper
 
 
@@ -55,23 +64,22 @@ def stringify(data):
     :param data: a list of addresses in dictionary format
     :return: the same list with all values except for `candidate` count as a string
     """
+
     def serialize(k, v):
         if k == "candidates":
             return int(v)
+
         if isinstance(v, numbers.Number):
             if k == "zipcode":
                 # If values are presented as integers then leading digits may be cut off,
                 # and these are significant for the zipcode. Add them back.
                 return str(v).zfill(5)
+
             return str(v)
+
         return v
 
-    return [
-        {
-            k: serialize(k, v) for k, v in json_dict.items()
-        }
-        for json_dict in data
-    ]
+    return [{k: serialize(k, v) for k, v in json_dict.items()} for json_dict in data]
 
 
 class Client(object):
@@ -80,8 +88,17 @@ class Client(object):
     """
     BASE_URL = "https://api.smartystreets.com/"
 
-    def __init__(self, auth_id, auth_token, standardize=False, invalid=False, logging=True,
-                 accept_keypair=False, truncate_addresses=False, timeout=None):
+    def __init__(
+        self,
+        auth_id,
+        auth_token,
+        standardize=False,
+        invalid=False,
+        logging=True,
+        accept_keypair=False,
+        truncate_addresses=False,
+        timeout=None,
+    ):
         """
         Constructs the client
 
@@ -117,21 +134,27 @@ class Client(object):
         :return: the dumped JSON response content
         """
         headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'x-standardize-only': 'true' if self.standardize else 'false',
-            'x-include-invalid': 'true' if self.invalid else 'false',
-            'x-accept-keypair': 'true' if self.accept_keypair else 'false',
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-standardize-only": "true" if self.standardize else "false",
+            "x-include-invalid": "true" if self.invalid else "false",
+            "x-accept-keypair": "true" if self.accept_keypair else "false",
         }
         if not self.logging:
-            headers['x-suppress-logging'] = 'true'
+            headers["x-suppress-logging"] = "true"
 
-        params = {'auth-id': self.auth_id, 'auth-token': self.auth_token}
+        params = {"auth-id": self.auth_id, "auth-token": self.auth_token}
         url = self.BASE_URL + endpoint
-        response = self.session.post(url, json.dumps(stringify(data)),
-                                     params=params, headers=headers, timeout=self.timeout)
+        response = self.session.post(
+            url,
+            json.dumps(stringify(data)),
+            params=params,
+            headers=headers,
+            timeout=self.timeout,
+        )
         if response.status_code == 200:
             return response.json()
+
         raise ERROR_CODES.get(response.status_code, SmartyStreetsError)
 
     @truncate_args
@@ -156,9 +179,9 @@ class Client(object):
         # While it's okay in theory to accept freeform addresses they do need to be submitted in
         # a dictionary format.
         if type(addresses[0]) != dict:
-            addresses = [{'street': arg for arg in addresses}]
+            addresses = [{"street": arg for arg in addresses}]
 
-        return AddressCollection(self.post('street-address', data=addresses))
+        return AddressCollection(self.post("street-address", data=addresses))
 
     def street_address(self, address):
         """
@@ -173,6 +196,7 @@ class Client(object):
         address = self.street_addresses([address])
         if not len(address):
             return None
+
         return Address(address[0])
 
     def zipcode(self, *args):
