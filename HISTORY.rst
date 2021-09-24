@@ -6,7 +6,8 @@ History
 1.0.0 (2021-09-24)
 ------------------
 
-* Remove Python 2 support and remove grequests based AsyncClient
+* BREAKING!!! Remove Python 2 support and remove grequests based AsyncClient
+* SmartyStreets.py is now tested against Python 3.7, 3.8, and 3.9
 
 0.4.0 (2016-03-25)
 ------------------
