@@ -5,6 +5,9 @@ SmartyStreets.py
 .. image:: https://badge.fury.io/py/smartystreets.py.svg
     :target: http://badge.fury.io/py/smartystreets.py
 
+.. image:: https://github.com/bennylope/smartystreets.py/actions/workflows/tests.yml/badge.svg
+    :target: https://github.com/bennylope/smartystreets.py/actions
+
 .. image:: https://pypip.in/d/smartystreets.py/badge.svg
         :target: https://pypi.python.org/pypi/smartystreets.py
 
