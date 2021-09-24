@@ -10,7 +10,7 @@ Tests for `smartystreets` module.
 
 import responses
 import unittest
-from mock import MagicMock
+from unittest.mock import MagicMock
 
 from smartystreets.client import Client, validate_args, truncate_args, stringify
 from smartystreets.data import Address, AddressCollection
