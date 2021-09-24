@@ -34,11 +34,6 @@ test_requirements = [
     'responses==0.3.0',
 ]
 
-# grequests isn't available on python 3, unfortunately, but make it a testing requirement
-# if we are on python 2.
-if int(sys.version[0]) == 2:
-    test_requirements.append('grequests')
-
 
 setup(
     name='smartystreets.py',
@@ -63,11 +58,10 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     test_suite='tests',
     tests_require=test_requirements,
