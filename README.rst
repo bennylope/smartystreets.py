@@ -5,9 +5,6 @@ SmartyStreets.py
 .. image:: https://badge.fury.io/py/smartystreets.py.svg
     :target: http://badge.fury.io/py/smartystreets.py
 
-.. image:: https://travis-ci.org/bennylope/smartystreets.py.svg?branch=master
-        :target: https://travis-ci.org/bennylope/smartystreets.py
-
 .. image:: https://pypip.in/d/smartystreets.py/badge.svg
         :target: https://pypi.python.org/pypi/smartystreets.py
 
