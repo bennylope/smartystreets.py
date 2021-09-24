@@ -5,18 +5,11 @@ Usage
 Client
 ======
 
-SmartyStreets.py provides two client classes, a synchronous `Client` class
-and an asynchronous `AsyncClient`. The latter requires `grequests`, a gevent
-driven interface for the requests library, and is of primary benefit to bulk
-geocoding jobs.
+SmartyStreets.py provides one client class, a synchronous `Client` class.
 
 For typical use cases::
 
     from smartystreets import Client
-
-Or for time-sensitive bulk jobs::
-
-    from smartystreets.async import AsyncClient as Client
 
 You'll need to provide your `AUTH_ID` and `AUTH_TOKEN` to create a client instance::
 

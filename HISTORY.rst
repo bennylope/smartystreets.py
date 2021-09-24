@@ -3,6 +3,11 @@
 History
 -------
 
+1.0.0 (2021-09-24)
+------------------
+
+* Remove Python 2 support and remove grequests based AsyncClient
+
 0.4.0 (2016-03-25)
 ------------------
 

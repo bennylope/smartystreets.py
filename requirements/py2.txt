@@ -1,4 +1,0 @@
-wheel==0.23.0
-grequests==0.2.0
-mock>=1.0.0
-responses==0.3.0
