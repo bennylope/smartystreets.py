@@ -5,4 +5,6 @@ __email__ = "ben@benlopatin.com"
 __version__ = "1.0.0"
 
 
-from .client import Client  # noqa
+from smartystreets.client import Client  # noqa
+
+__all__ = ["Client"]
