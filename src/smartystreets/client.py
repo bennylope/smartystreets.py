@@ -7,10 +7,10 @@ Client module for connecting to and interacting with SmartyStreets API
 
 import json
 import numbers
-import requests
+import httpx
 
-from .data import Address, AddressCollection
-from .exceptions import SmartyStreetsError, ERROR_CODES
+from smartystreets.data import Address, AddressCollection
+from smartystreets.exceptions import SmartyStreetsError, ERROR_CODES
 
 
 def validate_args(f):
@@ -56,32 +56,6 @@ def truncate_args(f):
     return wrapper
 
 
-def stringify(data):
-    """
-    Ensure all values in the dictionary are strings, except for the value for `candidate` which
-    should just be an integer.
-
-    :param data: a list of addresses in dictionary format
-    :return: the same list with all values except for `candidate` count as a string
-    """
-
-    def serialize(k, v):
-        if k == "candidates":
-            return int(v)
-
-        if isinstance(v, numbers.Number):
-            if k == "zipcode":
-                # If values are presented as integers then leading digits may be cut off,
-                # and these are significant for the zipcode. Add them back.
-                return str(v).zfill(5)
-
-            return str(v)
-
-        return v
-
-    return [{k: serialize(k, v) for k, v in json_dict.items()} for json_dict in data]
-
-
 class Client(object):
     """
     Client class for interacting with the SmartyStreets API
@@ -122,8 +96,8 @@ class Client(object):
         self.accept_keypair = accept_keypair
         self.truncate_addresses = truncate_addresses
         self.timeout = timeout
-        self.session = requests.Session()
-        self.session.mount(self.BASE_URL, requests.adapters.HTTPAdapter(max_retries=5))
+        self.session = httpx.Client(base_url=self.BASE_URL)
+        # self.session.mount(self.BASE_URL, requests.adapters.HTTPAdapter(max_retries=5))
 
     def post(self, endpoint, data):
         """
@@ -147,7 +121,7 @@ class Client(object):
         url = self.BASE_URL + endpoint
         response = self.session.post(
             url,
-            json.dumps(stringify(data)),
+            json=data,
             params=params,
             headers=headers,
             timeout=self.timeout,
