@@ -2,7 +2,7 @@
 
 __author__ = "Ben Lopatin"
 __email__ = "ben@benlopatin.com"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 
 from smartystreets.client import Client  # noqa
