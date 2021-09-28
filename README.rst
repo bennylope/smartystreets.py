@@ -34,9 +34,9 @@ and geolocation, as well as zipcode lookup and validation.
 Installation
 ============
 
-SmartyStreets.py requires the `requests library
-<http://docs.python-requests.org/en/latest/>`_ and will install it if it is
-found missing. **Installed versions < 2.0 will be upgraded.**::
+SmartyStreets.py requires the `httpx library
+<https://www.python-httpx.org/>`_ and will install it if it is
+found missing.
 
     pip install smartystreets.py
 
