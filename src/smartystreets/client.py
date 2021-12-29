@@ -5,8 +5,6 @@
 Client module for connecting to and interacting with SmartyStreets API
 """
 
-import json
-import numbers
 import httpx
 
 from smartystreets.data import Address, AddressCollection
