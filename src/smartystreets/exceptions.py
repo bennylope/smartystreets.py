@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Exceptions for SmartyStreets requests.
 """

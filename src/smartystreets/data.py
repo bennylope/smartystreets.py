@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Data structures module for SmartyStreets API.
 
