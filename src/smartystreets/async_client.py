@@ -15,6 +15,7 @@ class AsyncClient:
     """
     Client class for interacting with the SmartyStreets API
     """
+
     BASE_URL = "https://api.smartystreets.com/"
 
     def __init__(
