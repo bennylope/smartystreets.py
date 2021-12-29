@@ -56,7 +56,7 @@ def truncate_args(f):
     return wrapper
 
 
-class Client(object):
+class Client:
     """
     Client class for interacting with the SmartyStreets API
     """
