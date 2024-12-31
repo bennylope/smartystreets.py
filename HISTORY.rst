@@ -3,6 +3,13 @@
 History
 -------
 
+2.0.0 (2024-12-31)
+------------------
+
+* Cleanup code
+* Update Python version support, dropping Python < 3.9, adding Python <= 3.13
+
+
 1.1.0 (2021-09-26)
 ------------------
 
