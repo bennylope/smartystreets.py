@@ -13,6 +13,7 @@ class Client:
     """
     Client class for interacting with the SmartyStreets API
     """
+
     BASE_URL = "https://api.smartystreets.com/"
 
     def __init__(
@@ -105,7 +106,7 @@ class Client:
 
         # While it's okay in theory to accept freeform addresses they do need to be submitted in
         # a dictionary format.
-        if type(addresses[0]) != dict:
+        if not isinstance(addresses[0], dict):
             addresses = [{"street": arg for arg in addresses}]
 
         return AddressCollection(self.post("street-address", data=addresses))

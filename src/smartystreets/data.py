@@ -65,6 +65,7 @@ class AddressCollection(list):
     """
     Class for handling multiple responses.
     """
+
     id_lookup = {}  # For user supplied input_id
     index_lookup = {}  # For SmartyStreets input_index
 

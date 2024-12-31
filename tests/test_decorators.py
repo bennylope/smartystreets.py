@@ -5,12 +5,12 @@ Tests for decorators
 
 The decorator functions provide some safety around the parameters provided to API calls
 """
+
 import pytest
 from smartystreets.client import validate_args, truncate_args
 
 
 def test_truncate_args(mocker):
-
     selfarg = mocker.MagicMock()
     myargs = [i for i in range(104)]
 
