@@ -83,7 +83,7 @@ class AddressCollection(list):
             self.index_lookup[address.index] = index
             if address.id:
                 self.id_lookup[address.id] = index
-        super(AddressCollection, self).__init__(addresses)
+        super().__init__(addresses)
 
     def get(self, key):
         """

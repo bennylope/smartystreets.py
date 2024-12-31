@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
-"""
-Tests for decorators
+"""Tests for decorators
 
 The decorator functions provide some safety around the parameters provided to API calls
 """

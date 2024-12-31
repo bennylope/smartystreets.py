@@ -10,7 +10,7 @@ def validate_args(f):
     """
 
     def wrapper(self, args):
-        arg_types = set([type(arg) for arg in args])
+        arg_types = {type(arg) for arg in args}
         if len(arg_types) > 1:
             raise TypeError("Mixed input types are not allowed")
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 test_smartystreets
@@ -7,6 +6,7 @@ test_smartystreets
 
 Tests for `smartystreets` module.
 """
+
 
 import pytest
 import httpx
