@@ -1,0 +1,15 @@
+exclude: "docs|node_modules|migrations|.git|.tox|build|dist"
+default_stages: [ pre-commit ]
+fail_fast: true
+
+repos:
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: "v3.19.1"
+    hooks:
+      - id: pyupgrade
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.1.6"
+    hooks:
+        - id: ruff-format
+        - id: ruff

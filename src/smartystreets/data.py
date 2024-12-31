@@ -65,6 +65,7 @@ class AddressCollection(list):
     """
     Class for handling multiple responses.
     """
+
     id_lookup = {}  # For user supplied input_id
     index_lookup = {}  # For SmartyStreets input_index
 
@@ -82,7 +83,7 @@ class AddressCollection(list):
             self.index_lookup[address.index] = index
             if address.id:
                 self.id_lookup[address.id] = index
-        super(AddressCollection, self).__init__(addresses)
+        super().__init__(addresses)
 
     def get(self, key):
         """

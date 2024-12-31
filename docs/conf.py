@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SmartyStreets.py'
-copyright = u'2014-2016, Ben Lopatin'
+copyright = u'2014-2025, Ben Lopatin'
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
